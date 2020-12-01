@@ -8,10 +8,12 @@ import (
 	"time"
 )
 
+const filepath = "day_01/part_2/input.csv"
+
 func main() {
 	start := time.Now()
 	defer fmt.Printf("duration: %v\n", time.Now().Sub(start))
-	file, err := os.Open("day_01/part_2/input.csv")
+	file, err := os.Open(filepath)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -20,13 +22,13 @@ func main() {
 	if err != nil {
 		panic("could not read records: " + err.Error())
 	}
-	var inputs []int64
+	var inputs []int32
 	for _, record := range records {
 		value, err := strconv.Atoi(record[0])
 		if err != nil {
 			panic("could not convert record entry: " + err.Error())
 		}
-		inputs = append(inputs, int64(value))
+		inputs = append(inputs, int32(value))
 	}
 	found := false
 	for i := 0; i < len(inputs); i++ {
