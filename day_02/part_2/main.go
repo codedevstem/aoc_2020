@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -25,37 +26,41 @@ func main() {
 	if err != nil {
 		panic("could not read records: " + err.Error())
 	}
-	valid := 0
-	invalid := 0
+	valid, invalid := 0, 0
+	wg := sync.WaitGroup{}
+	m := sync.Mutex{}
 	for _, record := range records {
-		match := lineRegex.FindStringSubmatch(record[0])
-
-		paramsMap := make(map[string]string)
-		for i, name := range lineRegex.SubexpNames() {
-			if i > 0 && i <= len(match) {
+		wg.Add(1)
+		go func(wg *sync.WaitGroup, m *sync.Mutex, record string) {
+			match := lineRegex.FindStringSubmatch(record)
+			paramsMap := make(map[string]string)
+			for i, name := range lineRegex.SubexpNames() {
 				paramsMap[name] = match[i]
 			}
-		}
-		first, err := strconv.Atoi(paramsMap["First"])
-		if err != nil {
-			panic("Min not a numer: " + err.Error())
-		}
-		second, err := strconv.Atoi(paramsMap["Second"])
-		if err != nil {
-			panic("Max not a numer: " + err.Error())
-		}
-		letter := paramsMap["Letter"]
-		password := paramsMap["Password"]
+			first, err := strconv.Atoi(paramsMap["First"])
+			if err != nil {
+				panic("Min not a number: " + err.Error())
+			}
+			second, err := strconv.Atoi(paramsMap["Second"])
+			if err != nil {
+				panic("Max not a number: " + err.Error())
+			}
+			letter := paramsMap["Letter"]
+			password := paramsMap["Password"]
 
-		if string(password[first-1]) == letter && string(password[second-1]) == letter {
-			invalid++
-			continue
-		} else if string(password[first-1]) == letter || string(password[second-1]) == letter {
-			valid++
-			continue
-		} else {
-			invalid++
-		}
+			m.Lock()
+			if string(password[first-1]) == letter && string(password[second-1]) == letter {
+				invalid++
+			} else if string(password[first-1]) == letter || string(password[second-1]) == letter {
+				valid++
+			} else {
+				invalid++
+			}
+			m.Unlock()
+
+			wg.Done()
+		}(&wg, &m, record[0])
 	}
+	wg.Wait()
 	fmt.Printf("valid passwords: %d, invalid %d\n", valid, invalid)
 }
