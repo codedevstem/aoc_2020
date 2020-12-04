@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
 
-const filepath = "day_04/part_1/input.txt"
+const filepath = "day_04/part_2/input.txt"
 
 func main() {
 	start := time.Now()
@@ -51,10 +52,28 @@ func main() {
 	fmt.Printf("Read: %v\n", time.Now().Sub(start))
 
 	p1Start := time.Now()
+	var allValidatorRules = map[string]*regexp.Regexp{}
+	allValidatorRules["byr"] = regexp.MustCompile(`^(19[2-9][0-9])|(200[0-2])$`)
+	allValidatorRules["iyr"] = regexp.MustCompile(`^(201[0-9]|2020)$`)
+	allValidatorRules["eyr"] = regexp.MustCompile(`^(202[0-9]|2030)$`)
+	allValidatorRules["hgt"] = regexp.MustCompile(`^(1([5-8][0-9]|9[0-3])cm)|((59|6[0-9]|7[0-6])in)$`)
+	allValidatorRules["hcl"] = regexp.MustCompile(`^(#([0-9a-f]){6})$`)
+	allValidatorRules["ecl"] = regexp.MustCompile(`^(amb|blu|brn|gry|grn|hzl|oth)$`)
+	allValidatorRules["pid"] = regexp.MustCompile(`^([0-9]{9})$`)
 
 	validPasses := 0
 	for _, pass := range passports {
-		if len(pass) == 7 {
+		valid := true
+		if len(pass) != 7 {
+			continue
+		}
+		for key, field := range pass {
+			rule := allValidatorRules[key]
+			if !rule.MatchString(field) {
+				valid = false
+			}
+		}
+		if valid {
 			validPasses++
 		}
 	}
