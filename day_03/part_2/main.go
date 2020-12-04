@@ -8,11 +8,10 @@ import (
 	"time"
 )
 
-const filepath = "day_03/part_2/input.csv"
+const filepath = "day_03/part_2/input.txt"
 
 func main() {
 	start := time.Now()
-	defer fmt.Printf("duration: %v\n", time.Now().Sub(start))
 	file, err := os.Open(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -23,7 +22,6 @@ func main() {
 			panic(err)
 		}
 	}()
-
 	scanner := bufio.NewScanner(file)
 	var forest []string
 	for scanner.Scan() {
@@ -64,5 +62,6 @@ func main() {
 		multiplied = multiplied * int64(inst[foundIndex])
 	}
 	fmt.Printf("Trees Found: %d\n", multiplied)
+	fmt.Printf("duration: %v\n", time.Now().Sub(start))
 
 }

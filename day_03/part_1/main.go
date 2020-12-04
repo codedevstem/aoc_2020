@@ -8,11 +8,10 @@ import (
 	"time"
 )
 
-const filepath = "day_03/part_1/input.csv"
+const filepath = "day_03/part_1/input.txt"
 
 func main() {
 	start := time.Now()
-	defer fmt.Printf("duration: %v\n", time.Now().Sub(start))
 	file, err := os.Open(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -44,6 +43,7 @@ func main() {
 		}
 		searchIndex = searchIndex + increment
 	}
-	fmt.Printf("found: %d trees", treesFound)
+	fmt.Printf("found: %d trees\n", treesFound)
+	fmt.Printf("duration: %v\n", time.Now().Sub(start))
 
 }
