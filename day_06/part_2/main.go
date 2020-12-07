@@ -26,7 +26,6 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var sumYesAll = 0
 	yesMapCurrentGroup := map[rune]int{}
-	scanner.Text()
 	peopleInCurrentGroup := 0
 	for scanner.Scan() {
 		raw := scanner.Text()
