@@ -40,6 +40,7 @@ func main() {
 			bagMap[matches[0][2]] = append(bagMap[matches[0][2]], matches[i][2])
 		}
 	}
+	fmt.Printf("Read: %v\n", time.Now().Sub(read))
 	p1 := time.Now()
 
 	var canHold []string
@@ -52,7 +53,6 @@ func main() {
 		}
 	}
 	sort.Strings(canHold)
-	fmt.Printf("Read: %v\n", time.Now().Sub(read))
 	fmt.Printf("P1: %v\n", time.Now().Sub(p1))
 	fmt.Printf("Total: %v\n", time.Now().Sub(start))
 	fmt.Printf("Sum can contain: %d\n", len(canHold))

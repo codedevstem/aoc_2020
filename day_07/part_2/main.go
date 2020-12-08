@@ -46,12 +46,11 @@ func main() {
 			bagMap[matches[0][4]] = append(bagMap[matches[0][4]], BagTuple{matches[i][4], numberOfBagsToContain})
 		}
 	}
-	p1 := time.Now()
-
+	fmt.Printf("Read: %v\n", time.Now().Sub(read))
+	p2 := time.Now()
 	var numberOfBagsToHold = 0
 	numberOfBagsToHold += CalculateNrBagsToHoldForKey(bagMap["shiny gold"], bagMap)
-	fmt.Printf("Read: %v\n", time.Now().Sub(read))
-	fmt.Printf("P1: %v\n", time.Now().Sub(p1))
+	fmt.Printf("P2: %v\n", time.Now().Sub(p2))
 	fmt.Printf("Total: %v\n", time.Now().Sub(start))
 	fmt.Printf("Sum can contain: %d\n", numberOfBagsToHold)
 }
