@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-const filepath = "day_01/part_2/input.csv"
+const filepath = "input.csv"
 
 func main() {
 	start := time.Now()
-	defer fmt.Printf("duration: %v\n", time.Now().Sub(start))
+	defer func() { fmt.Printf("duration: %v\n", time.Now().Sub(start)) }()
 	file, err := os.Open(filepath)
 	if err != nil {
 		panic(err.Error())

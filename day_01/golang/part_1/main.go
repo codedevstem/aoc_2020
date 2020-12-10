@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const filepath = "day_01/part_1/input.csv"
+const filepath = "input.csv"
 
 func main() {
 	start := time.Now()
